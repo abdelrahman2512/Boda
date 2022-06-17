@@ -1,58 +1,65 @@
-import json
-import redis
-from utils.config import sudo,bot_id
-from utils.func import bot
+import os
+import re
+from sys import path
+try:
+    import setuptools
+except Exception:
+    os.system("sudo python3.6 -m pip install setuptools")
+try:
+    import requests
+except Exception:
+    os.system("sudo python3.6 -m pip install requests")
+try:
+    import pyrogram
+except Exception:
+    os.system("sudo python3.6 -m pip install pyrogram")
+try:
+    import redis
+except Exception:
+    os.system("sudo python3.6 -m pip install redis")
+try:
+    import collections
+except Exception:
+    os.system("sudo python3.6 -m pip install collections")
+try:
+    import asyncio
+except Exception:
+    os.system("sudo python3.6 -m pip install asyncio")
+try:
+    import sqlite3
+except Exception:
+    os.system("sudo python3.6 -m pip install sqlite3")
 
 
-data = redis.Redis("127.0.0.1",6379)
+v = str(os.system("sudo python3.6 -V"))
 
-def rstart(client,message):
-    chat_id = message.chat.id
-    message_id = message.message_id
-    chat_type = message.chat.type
-    first = str(message.from_user.first_name)
-    text = message.text
-    user_id = message.from_user.id
-    if text == "/start":
-        if chat_type == "private":
-            if str(user_id) == str(sudo):
-                bot("sendMessage",{
-                    "chat_id":chat_id,
-                    "text":"*أهلا بك عزيزي المطور في لوحة الاوامر*",
-                    "reply_to_message_id":message_id,
-                    "parse_mode":"MarkDown",
-                    "reply_markup":json.dumps({
-                        "keyboard":[
-                            [
-                                {"text":"اذاعه"},
-                                {"text":"المطورين"}
-                            ],
-                            [
-                                {"text":"رفع مطور"},
-                                {"text":"تنزيل مطور"}
-                            ],
-                            [
-                                {"text":"تعيين قناة الاشتراك الاجباري"},
-                                {"text":"حذف قناة الاشتراك الاجباري"}
-                            ],
-                            [
-                                {"text":"تعيين كليشة ستارت"},
-                                {"text":"حذف كليشة ستارت"}
-                            ],
-                            [
-                                {"text":"تعيين كليشة الاشتراك الاجباري"},
-                                        
-                                {"text":"حذف كليشة الاشتراك الاجباري"}
-                            ],
-                            [
-                                {"text":"مسح المطورين"},
-                                {"text":"الاحصائيات"}
-                            ]
-                        ]
-                    })
-                })
-            else:
-                txt = str(data.get(bot_id+"-mediapy-start-txt").decode()) if data.get(bot_id+"-mediapy-start-txt") else "*أهلا بك عزيزي في بوت حذف الميديا\nلتفعيل البوت ارفعه مشرف في المجموعه واكتب تفعيل (بصلاحية المالك والمشرفين فقط)*"
-                bot("sendMessage",{"chat_id":chat_id,"text":txt,"reply_to_message_id":message_id,"parse_mode":"markdown"})
+os.system("sudo chmod +x *")
 
+if re.search(v,"3.6.13"):
+    print(True)
+else:
+    os.system("sudo ./install.sh")
+    os.system("cd "+str(path[0]))
+os.system("sudo python3.6 -m pip install redis-server")
+os.system("sudo systemctl enable redis-server.service")
+os.system("sudo service redis-server start")
+os.system("sudo python3.6 -m pip install tgcrypto")
 
+if os.path.exists(str(path[0])+"/utils/config.py"):
+    print(True)
+else:
+    token = str(input("+ Enter Your Bot Token Here :- "))
+    print("===========================================")
+    sudo = str(input("+ Enter Your Sudo Id Here :- "))
+    sp = token.split(sep=":")
+    bot_id = str(sp[0])
+    f = open("utils/config.py","w")
+    f.write("""
+token='{}'
+sudo='{}'
+bot_id='{}'
+    """.format(token,sudo,bot_id))
+    f.close()
+    os.system("clear")
+
+os.system("screen -S python-media ./ts.sh")
